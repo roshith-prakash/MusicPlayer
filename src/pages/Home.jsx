@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { ListSong, MusicPlayer, Search } from "../components";
+import { useEffect, useRef, useState } from "react";
+import { ListSong, MusicPlayer, Search, Account } from "../components";
 import spotify from "../assets/logo.png";
 import useDebounce from "../hooks/useDebounce";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
+import ColorThief from "colorthief";
 
 const Home = () => {
   const [displaySongs, setDisplaySongs] = useState();
@@ -14,6 +15,9 @@ const Home = () => {
   const [tab, setTab] = useState("ForYou");
   const [open, setOpen] = useState(false);
   const debouncedInput = useDebounce(userInput);
+  const backgroundRef = useRef();
+
+  const [color1, setColor1] = useState([36, 33, 29]);
 
   // Fetching data from API
   const {
@@ -113,8 +117,38 @@ const Home = () => {
     }
   };
 
+  // To change background color based on song
+  useEffect(() => {
+    // Run only when a song is selected
+    if (selectedSong) {
+      // Create a new color thief instance
+      const colorThief = new ColorThief();
+      // Create a new image object.
+      const image = new Image();
+      // Add the image source
+      image.src = `https://cms.samespace.com/assets/${selectedSong?.cover}`;
+      // Add cross origin anonymous so that color thief can work
+      image.crossOrigin = "anonymous";
+      // Add event listener for getting color when image loads
+      image.addEventListener("load", () => {
+        setColor1(colorThief.getColor(image));
+      });
+    }
+  }, [selectedSong?.id]);
+
   return (
-    <div className="h-screen relative overflow-hidden bg-black">
+    <div
+      className="h-screen relative overflow-hidden transiton-all box"
+      ref={backgroundRef}
+      style={{
+        transition: "background 4s ease",
+        background: `linear-gradient(to bottom right, rgb(${color1[0]},${color1[1]},${color1[2]}), black)`,
+      }}
+    >
+      <div className="absolute left-5 bottom-5">
+        <Account />
+      </div>
+
       {/* Top Bar */}
       <div className="h-20 flex justify-between lg:justify-normal items-center w-full p-5 px-10">
         {/* Logo + Title */}
@@ -173,6 +207,7 @@ const Home = () => {
               className="cursor-pointer text-2xl text-white"
             />
           </div>
+          {/* Song list + search box */}
           <div className="mt-14 h-full flex flex-col items-center">
             <div className="h-full flex-1 flex-col items-center">
               {/* Search bar for filtering songs based on user input */}
@@ -231,7 +266,7 @@ const Home = () => {
       <div className="h-full pt-5">
         <div className="flex">
           {/* Song List - Hidden on Smaller Screens */}
-          <div className="h-full flex-1 hidden lg:flex flex-col items-end mr-60 ">
+          <div className="h-full flex-1 hidden lg:flex flex-col items-end mr-64 ">
             {/* Search bar for filtering songs based on user input */}
             <Search
               value={userInput}
@@ -268,7 +303,7 @@ const Home = () => {
           </div>
 
           {/* Music Player Div */}
-          <div className="flex-1 flex justify-center text-white">
+          <div className="flex-1 flex justify-center lg:justify-start text-white">
             {selectedSong ? (
               <MusicPlayer
                 goToPrevious={selectPreviousSong}
@@ -276,6 +311,7 @@ const Home = () => {
                 selectedSong={selectedSong}
               />
             ) : (
+              // Position Holder when no song is selected
               <div className="w-[60%] relative h-[60vh] lg:h-full flex flex-col justify-center lg:justify-start ">
                 <img src={spotify} className="w-[80%] max-w-80 mx-auto" />
                 <p className="mt-5 text-xl text-center">

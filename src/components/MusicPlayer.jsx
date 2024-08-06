@@ -5,7 +5,6 @@ import { FaPause } from "react-icons/fa6";
 import { FaForward } from "react-icons/fa";
 import { FaBackward } from "react-icons/fa";
 import { FaVolumeHigh } from "react-icons/fa6";
-import { FaVolumeMute } from "react-icons/fa";
 import {
   Popover,
   PopoverContent,
@@ -91,7 +90,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
         onChange={changeValueBySeeker}
         max={duration}
         type="range"
-        className="accent-white"
+        className="accent-white noThumb"
       />
 
       {/* Additional Controls */}
@@ -99,7 +98,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
         {/* Controls for 3 dotted buttons - Added Download */}
         <Popover>
           <PopoverTrigger>
-            <button className="bg-gray-800 p-3 rounded-full">
+            <button className="bg-bggrey p-3 rounded-full">
               <BsThreeDots className="text-white text-lg" />
             </button>
           </PopoverTrigger>
@@ -114,44 +113,53 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
             </a>
           </PopoverContent>
         </Popover>
+        {/* Backward + Play / Pause + Forward buttons */}
         <div className="flex items-center gap-x-2">
+          {/* Backward button */}
           <button
             onClick={() => {
               goToPrevious();
               setPlaying(true);
             }}
-            className="bg-gray-800 p-3 rounded-full"
+            className="px-3 rounded-full"
           >
-            <FaBackward className="text-white text-lg" />
+            <FaBackward className="text-[#9b9a98] text-lg" />
           </button>
+
+          {/* If playing, show pause button, else show playing button */}
           {playing ? (
+            // Pause button
             <button
               onClick={playOrPause}
-              className="bg-gray-800 p-3 rounded-full"
+              className="bg-bggrey p-3 rounded-full"
             >
               <FaPause className="text-white text-lg" />
             </button>
           ) : (
+            // Play button
             <button
               onClick={playOrPause}
-              className="bg-gray-800 p-3 rounded-full"
+              className="bg-bggrey p-3 rounded-full"
             >
               <FaPlay className="text-white text-lg" />
             </button>
           )}
+          {/* Forward Button */}
           <button
             onClick={() => {
               goToNext();
               setPlaying(true);
             }}
-            className="bg-gray-800 p-3 rounded-full"
+            className="px-3 rounded-full"
           >
-            <FaForward className="text-white text-lg" />
+            <FaForward className="text-[#9b9a98] text-lg" />
           </button>
         </div>
+
+        {/* Volume control button */}
         <Popover>
           <PopoverTrigger>
-            <button className="bg-gray-800 p-3 rounded-full">
+            <button className="bg-bggrey p-3 rounded-full">
               <FaVolumeHigh className="text-white text-lg" />
             </button>
           </PopoverTrigger>

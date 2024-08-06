@@ -21,7 +21,7 @@ const ListSong = ({ song, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="w-80 hover:bg-slate-900 hover:scale-105 cursor-pointer transition-all p-5 flex"
+      className="w-80 cursor-pointer hover:-translate-y-1 py-5 transition-all flex"
     >
       <div className="w-full flex items-center justify-between gap-x-5">
         <div className="flex items-center gap-x-5">

@@ -10,3 +10,8 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.noThumb::-webkit-slider-thumb {
+  background-color: transparent;
+  height: 0px;
+}
