@@ -114,7 +114,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-clip flex flex-col bg-black">
+    <div className="h-screen relative overflow-hidden bg-black">
       {/* Top Bar */}
       <div className="h-20 flex justify-between lg:justify-normal items-center w-full p-5 px-10">
         {/* Logo + Title */}
@@ -206,7 +206,7 @@ const Home = () => {
               {tab == "TopTracks" && (
                 <div
                   data-aos="fade-up"
-                  className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
+                  className="flex-1 pt-10 h-full flex flex-col items-center overflow-scroll no-scrollbar"
                 >
                   {topSongs &&
                     topSongs.map((song) => {
@@ -228,16 +228,15 @@ const Home = () => {
       </div>
 
       {/* Rest of Screen - List + Player */}
-      <div className="flex-1 h-full pt-5">
+      <div className="h-full pt-5">
         <div className="flex">
           {/* Song List - Hidden on Smaller Screens */}
-          <div className="h-full overflow-clip hidden lg:flex flex-1 flex-col items-center pl-20">
+          <div className="h-full flex-1 hidden lg:flex flex-col items-end mr-60 ">
             {/* Search bar for filtering songs based on user input */}
             <Search
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
             />
-
             {/* List of All Songs / For You */}
             {tab == "ForYou" && (
               <div
@@ -252,7 +251,6 @@ const Home = () => {
                   })}
               </div>
             )}
-
             {/* List of Top Songs */}
             {tab == "TopTracks" && (
               <div
