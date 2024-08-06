@@ -1,13 +1,36 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa6";
 import { FaPause } from "react-icons/fa6";
 import { FaForward } from "react-icons/fa";
 import { FaBackward } from "react-icons/fa";
 import { FaVolumeHigh } from "react-icons/fa6";
 
 const MusicPlayer = ({ selectedSong }) => {
-  const [playing, setPlaying] = useState(false);
+  // Reference to the audio element
+  const playerRef = useRef();
+  // State to check whether the song is playing or not
+  const [playing, setPlaying] = useState(true);
+  // For the max value of range
+  const [duration, setDuration] = useState(0);
+  // For the current value of range
+  const [currentTime, setCurrentTime] = useState(0);
+
+  // To play or pause the song
+  const playOrPause = () => {
+    if (playing) {
+      playerRef.current.pause();
+      setPlaying(false);
+    } else {
+      playerRef.current.play();
+      setPlaying(true);
+    }
+  };
+
+  const updateSeekerWhenPlaying = () => {
+    setDuration(playerRef.current.duration);
+    setCurrentTime(playerRef.current.currentTime);
+  };
 
   return (
     <div className="flex w-[60%] flex-col gap-y-5">
@@ -20,7 +43,21 @@ const MusicPlayer = ({ selectedSong }) => {
         src={`https://cms.samespace.com/assets/${selectedSong?.cover}`}
       />
 
-      <input type="range" className="accent-white" />
+      <audio
+        autoPlay
+        ref={playerRef}
+        src={selectedSong?.url}
+        onTimeUpdate={updateSeekerWhenPlaying}
+        className="hidden"
+      />
+
+      <input
+        value={currentTime}
+        min={0}
+        max={duration}
+        type="range"
+        className="accent-white"
+      />
 
       <div className="flex items-center justify-between">
         <button className="bg-gray-800 p-3 rounded-full">
@@ -32,14 +69,14 @@ const MusicPlayer = ({ selectedSong }) => {
           </button>
           {playing ? (
             <button
-              onClick={() => setPlaying(false)}
+              onClick={playOrPause}
               className="bg-gray-800 p-3 rounded-full"
             >
               <FaPause className="text-white text-lg" />
             </button>
           ) : (
             <button
-              onClick={() => setPlaying(true)}
+              onClick={playOrPause}
               className="bg-gray-800 p-3 rounded-full"
             >
               <FaPlay className="text-white text-lg" />
