@@ -6,7 +6,7 @@ import { FaForward } from "react-icons/fa";
 import { FaBackward } from "react-icons/fa";
 import { FaVolumeHigh } from "react-icons/fa6";
 
-const MusicPlayer = ({ selectedSong }) => {
+const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   // Reference to the audio element
   const playerRef = useRef();
   // State to check whether the song is playing or not
@@ -27,22 +27,32 @@ const MusicPlayer = ({ selectedSong }) => {
     }
   };
 
+  // To Auto update the seeker value when the audio is playing
   const updateSeekerWhenPlaying = () => {
     setDuration(playerRef.current.duration);
     setCurrentTime(playerRef.current.currentTime);
   };
 
+  // To  update the currentTime value by interacting with the seeker
+  const changeValueBySeeker = (e) => {
+    playerRef.current.currentTime = e.target.value;
+    setCurrentTime(e.target.value);
+  };
+
   return (
     <div className="flex w-[60%] flex-col gap-y-5">
+      {/* Song Title + artist name */}
       <div>
         <p className="text-xl font-medium">{selectedSong?.name}</p>
         <p className="text-sm text-slate-300">{selectedSong?.artist}</p>
       </div>
+      {/* Song Cover Art */}
       <img
         className="w-full h-96 rounded"
         src={`https://cms.samespace.com/assets/${selectedSong?.cover}`}
       />
 
+      {/* Hidden audio tag */}
       <audio
         autoPlay
         ref={playerRef}
@@ -51,20 +61,26 @@ const MusicPlayer = ({ selectedSong }) => {
         className="hidden"
       />
 
+      {/* Seek bar for the audio */}
       <input
         value={currentTime}
         min={0}
+        onChange={changeValueBySeeker}
         max={duration}
         type="range"
         className="accent-white"
       />
 
+      {/* Additional Controls */}
       <div className="flex items-center justify-between">
         <button className="bg-gray-800 p-3 rounded-full">
           <BsThreeDots className="text-white text-lg" />
         </button>
         <div className="flex items-center gap-x-2">
-          <button className="bg-gray-800 p-3 rounded-full">
+          <button
+            onClick={goToPrevious}
+            className="bg-gray-800 p-3 rounded-full"
+          >
             <FaBackward className="text-white text-lg" />
           </button>
           {playing ? (
@@ -83,7 +99,7 @@ const MusicPlayer = ({ selectedSong }) => {
             </button>
           )}
           <button className="bg-gray-800 p-3 rounded-full">
-            <FaForward className="text-white text-lg" />
+            <FaForward onClick={goToNext} className="text-white text-lg" />
           </button>
         </div>
         <button className="bg-gray-800 p-3 rounded-full">
