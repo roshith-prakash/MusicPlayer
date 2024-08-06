@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ListSong, MusicPlayer, Search } from "../components";
 import spotify from "../assets/logo.png";
 import useDebounce from "../hooks/useDebounce";
+import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 
 const Home = () => {
   const [displaySongs, setDisplaySongs] = useState();
@@ -11,6 +12,7 @@ const Home = () => {
   const [topSongs, setTopSongs] = useState();
   const [userInput, setUserInput] = useState("");
   const [tab, setTab] = useState("ForYou");
+  const [open, setOpen] = useState(false);
   const debouncedInput = useDebounce(userInput);
 
   // Fetching data from API
@@ -112,9 +114,9 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-clip flex flex-col bg-black">
+    <div className="min-h-screen relative overflow-clip flex flex-col bg-black">
       {/* Top Bar */}
-      <div className="h-20 flex items-center w-full p-5 px-10">
+      <div className="h-20 flex justify-between lg:justify-normal items-center w-full p-5 px-10">
         {/* Logo + Title */}
         <div className="flex gap-x-3 items-center">
           <img src={spotify} className="h-9 w-9 pointer-events-none" />
@@ -124,8 +126,8 @@ const Home = () => {
           </p>
         </div>
 
-        {/* Button Group */}
-        <div className="text-white flex gap-x-14 px-10 font-semibold text-xl ml-20">
+        {/* Button Group for Larger Screens */}
+        <div className="text-white hidden lg:flex gap-x-14 px-10 font-semibold text-xl ml-20">
           <button
             onClick={() => setTab("ForYou")}
             className={`hover:scale-105 transition-all ${
@@ -143,12 +145,93 @@ const Home = () => {
             Top Tracks
           </button>
         </div>
+
+        <RxHamburgerMenu
+          onClick={() => setOpen(true)}
+          className="md:hidden text-xl cursor-pointer text-cta transition-all text-white"
+        />
+
+        {/* Pop out div - displayed when hamburger is clicked  */}
+        <div
+          className={`block lg:hidden bg-black h-screen w-full text-xl md:text-lg fixed top-0 right-0 z-50 pb-6 text-center shadow-md ${
+            open ? "translate-x-0" : "translate-x-[100%]"
+          } transition-all duration-500`}
+        >
+          {/* Top bar */}
+          <div className="flex justify-between items-center py-5 px-10 lg:px-10 mb-14">
+            {/* Title */}
+            <div className="flex items-center gap-x-3 cursor-pointer">
+              <img src={spotify} className="h-9 w-9 pointer-events-none" />
+              <p className="text-white font-medium text-2xl flex items-start">
+                Spotify
+                <span className="text-xs pt-2">&reg;</span>
+              </p>
+            </div>
+            {/* Close drawer */}
+            <RxCross2
+              onClick={() => setOpen(false)}
+              className="cursor-pointer text-2xl text-white"
+            />
+          </div>
+          <div className="mt-14 h-full flex flex-col items-center">
+            <div className="h-full flex-1 flex-col items-center">
+              {/* Search bar for filtering songs based on user input */}
+              <Search
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+              />
+
+              {/* List of All Songs / For You */}
+              {tab == "ForYou" && (
+                <div
+                  data-aos="fade-up"
+                  className={`flex-1 pt-10 h-full flex flex-col items-center overflow-scroll no-scrollbar`}
+                >
+                  {displaySongs &&
+                    displaySongs.map((song) => {
+                      return (
+                        <ListSong
+                          onClick={() => {
+                            setSong(song);
+                            setOpen(false);
+                          }}
+                          song={song}
+                        />
+                      );
+                    })}
+                </div>
+              )}
+
+              {/* List of Top Songs */}
+              {tab == "TopTracks" && (
+                <div
+                  data-aos="fade-up"
+                  className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
+                >
+                  {topSongs &&
+                    topSongs.map((song) => {
+                      return (
+                        <ListSong
+                          onClick={() => {
+                            setSong(song);
+                            setOpen(false);
+                          }}
+                          song={song}
+                        />
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Rest of Screen - List + Player */}
-      <div className="flex-1 pt-5">
-        <div className="flex relative">
-          <div className="h-full overflow-clip flex flex-1 flex-col items-center pl-20">
+      <div className="flex-1 h-full pt-5">
+        <div className="flex">
+          {/* Song List - Hidden on Smaller Screens */}
+          <div className="h-full overflow-clip hidden lg:flex flex-1 flex-col items-center pl-20">
             {/* Search bar for filtering songs based on user input */}
             <Search
               value={userInput}
@@ -159,11 +242,13 @@ const Home = () => {
             {tab == "ForYou" && (
               <div
                 data-aos="fade-up"
-                className={`flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar`}
+                className={`flex-1 pt-5 h-full flex flex-col items-center overflow-scroll no-scrollbar`}
               >
                 {displaySongs &&
                   displaySongs.map((song) => {
-                    return <ListSong setSong={setSong} song={song} />;
+                    return (
+                      <ListSong onClick={() => setSong(song)} song={song} />
+                    );
                   })}
               </div>
             )}
@@ -172,11 +257,13 @@ const Home = () => {
             {tab == "TopTracks" && (
               <div
                 data-aos="fade-up"
-                className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
+                className="flex-1 pt-5 h-full flex flex-col items-center overflow-scroll no-scrollbar"
               >
                 {topSongs &&
                   topSongs.map((song) => {
-                    return <ListSong setSong={setSong} song={song} />;
+                    return (
+                      <ListSong onClick={() => setSong(song)} song={song} />
+                    );
                   })}
               </div>
             )}
@@ -191,8 +278,8 @@ const Home = () => {
                 selectedSong={selectedSong}
               />
             ) : (
-              <div className="w-[60%]">
-                <img src={spotify} className="max-w-80 mx-auto" />
+              <div className="w-[60%] relative h-[60vh] lg:h-full flex flex-col justify-center lg:justify-start ">
+                <img src={spotify} className="w-[80%] max-w-80 mx-auto" />
                 <p className="mt-5 text-xl text-center">
                   Click on a Song to start playing!
                 </p>
