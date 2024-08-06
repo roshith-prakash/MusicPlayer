@@ -139,14 +139,14 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
               <FaPlay className="text-white text-lg" />
             </button>
           )}
-          <button className="bg-gray-800 p-3 rounded-full">
-            <FaForward
-              onClick={() => {
-                goToNext();
-                setPlaying(true);
-              }}
-              className="text-white text-lg"
-            />
+          <button
+            onClick={() => {
+              goToNext();
+              setPlaying(true);
+            }}
+            className="bg-gray-800 p-3 rounded-full"
+          >
+            <FaForward className="text-white text-lg" />
           </button>
         </div>
         <Popover>
