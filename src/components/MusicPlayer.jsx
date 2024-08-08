@@ -67,11 +67,13 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   };
 
   return (
-    <div className="flex w-[80%] lg:w-[60%] flex-col gap-y-5">
+    <div className="flex w-[80%] lg:w-[65%] flex-col gap-y-5">
       {/* Song Title + artist name */}
       <div>
-        <p className="text-xl font-medium">{selectedSong?.name}</p>
-        <p className="text-sm text-slate-300">{selectedSong?.artist}</p>
+        <p className="text-4xl font-medium text-left -translate-x-1">
+          {selectedSong?.name}
+        </p>
+        <p className="text-sm mt-0.5 text-slate-300">{selectedSong?.artist}</p>
       </div>
       {/* Song Cover Art */}
       <div className="h-96 flex justify-center items-center">
