@@ -26,6 +26,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   // To check if cover is loading
   const [loading, setLoading] = useState(true);
 
+  // When song is changed, set playing to true
   useEffect(() => {
     setPlaying(true);
   }, [selectedSong?.id]);
@@ -70,11 +71,14 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
     <div className="flex w-[80%] lg:w-[65%] flex-col gap-y-5">
       {/* Song Title + artist name */}
       <div>
+        {/* Title - extra large size */}
         <p className="text-4xl font-medium text-left -translate-x-1">
           {selectedSong?.name}
         </p>
+        {/* Artist's name */}
         <p className="text-sm mt-0.5 text-slate-300">{selectedSong?.artist}</p>
       </div>
+
       {/* Song Cover Art */}
       <div className="h-96 flex justify-center items-center">
         <img
@@ -98,13 +102,17 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
       />
 
       {/* Seek bar for the audio */}
+      {/* Value added in style for custom css */}
       <input
         value={currentTime}
         min={0}
         onChange={changeValueBySeeker}
         max={duration}
         type="range"
-        className="accent-white noThumb"
+        className="accent-white noThumb slider"
+        style={{
+          "--value": `${(currentTime / duration) * 100}%`,
+        }}
       />
 
       {/* Additional Controls */}
@@ -127,6 +135,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
             </a>
           </PopoverContent>
         </Popover>
+
         {/* Backward + Play / Pause + Forward buttons */}
         <div className="flex items-center gap-x-2">
           {/* Backward button */}
@@ -172,6 +181,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
 
         {/* Volume control button */}
         <Popover>
+          {/* Button to open up pop up */}
           <PopoverTrigger>
             <button className="bg-bggrey p-3 rounded-full">
               {audioVolume == 0.0 ? (
@@ -181,7 +191,9 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
               )}
             </button>
           </PopoverTrigger>
+          {/* Input range to decrease volume */}
           <PopoverContent className="w-fit py-3 px-5 bg-black border-none">
+            {/* Max volume is 1.0. Min volume is 0.0 */}
             <input
               value={audioVolume}
               min={0.0}

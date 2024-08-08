@@ -11,9 +11,11 @@ import { auth } from "../firebase/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import toast from "react-hot-toast";
 
+// Initialize Google Auth Provider
 const provider = new GoogleAuthProvider();
 
 const Account = () => {
+  // Get the current user from firebase
   const { currentUser } = useAuth();
 
   // Handle Google Signup

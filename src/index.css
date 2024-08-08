@@ -2,16 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
+/* To hide the scroll bar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
-/* Hide scrollbar for IE, Edge and Firefox */
+
+/* To hide the scroll bar  */
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.noThumb::-webkit-slider-thumb {
-  background-color: transparent;
-  height: 0px;
+/* Styling for the input range */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  /* The track already traversed is colored with white, rest with grey */
+  background: linear-gradient(
+    to right,
+    #fff 0%,
+    #fff var(--value),
+    #393b3c var(--value),
+    #393b3c 100%
+  );
+  outline: none;
+  opacity: 1;
+  border-radius: 10px;
+}
+
+/* To decrease the size od the thumb & hide it */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  visibility: hidden;
+  margin-left: -2px;
+}
+
+/* Show thumb when hovered over range */
+.slider:hover::-webkit-slider-thumb {
+  visibility: visible;
+}
+
+/* Styling for firefox */
+.slider::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 50%;
+  visibility: hidden;
+  margin-left: -2px;
+}
+
+/* Show thumb when hovered over range */
+.slider:hover::-moz-range-thumb {
+  visibility: visible;
 }

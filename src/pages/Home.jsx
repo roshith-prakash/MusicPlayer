@@ -5,11 +5,11 @@ import { ListSong, MusicPlayer, Search, Account } from "../components";
 import spotify from "../assets/logo.png";
 import useDebounce from "../hooks/useDebounce";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
-import ColorThief from "colorthief";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import ListLoader from "../components/ListLoader";
 
 const Home = () => {
+  // All songs fetched from the API
   const [displaySongs, setDisplaySongs] = useState();
   const [selectedSong, setSelectedSong] = useState();
   const [topSongs, setTopSongs] = useState();
@@ -17,8 +17,6 @@ const Home = () => {
   const [tab, setTab] = useState("ForYou");
   const [open, setOpen] = useState(false);
   const debouncedInput = useDebounce(userInput);
-  // State to manage the color
-  const [color1, setColor1] = useState([36, 33, 29]);
 
   // Fetching data from API
   const {
@@ -31,6 +29,8 @@ const Home = () => {
       return axios.get("https://cms.samespace.com/items/songs");
     },
   });
+
+  console.log(songs);
 
   // When data is fetched from API, set the for you songs & the top songs
   useEffect(() => {
@@ -118,30 +118,13 @@ const Home = () => {
     }
   };
 
-  // To change background color based on song
-  useEffect(() => {
-    // Run only when a song is selected
-    if (selectedSong) {
-      // Create a new color thief instance
-      const colorThief = new ColorThief();
-      // Create a new image object.
-      const image = new Image();
-      // Add the image source
-      image.src = `https://cms.samespace.com/assets/${selectedSong?.cover}`;
-      // Add cross origin anonymous so that color thief can work
-      image.crossOrigin = "anonymous";
-      // Add event listener for getting color when image loads
-      image.addEventListener("load", () => {
-        setColor1(colorThief.getColor(image));
-      });
-    }
-  }, [selectedSong?.id]);
-
   return (
     <div
       className="h-screen flex flex-col overflow-hidden relative no-scrollbar"
       style={{
-        background: `linear-gradient(to bottom right, rgb(${color1[0]},${color1[1]},${color1[2]}), black)`,
+        background: `linear-gradient(to bottom right, ${
+          selectedSong?.accent || "#24211d"
+        }, black)`,
       }}
     >
       {/* Account button */}
@@ -196,7 +179,9 @@ const Home = () => {
             open ? "translate-x-0" : "translate-x-[100%]"
           } transition-all duration-500`}
           style={{
-            background: `linear-gradient(to bottom right, rgb(${color1[0]},${color1[1]},${color1[2]}), black)`,
+            background: `linear-gradient(to bottom right, ${
+              selectedSong?.accent || "#24211d"
+            }, black)`,
           }}
         >
           {/* Top bar */}

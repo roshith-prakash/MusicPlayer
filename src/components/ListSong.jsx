@@ -22,6 +22,7 @@ const ListSong = ({ song, onClick }) => {
   }, [song?.id]);
 
   return (
+    // On clicking the component - set Selected song as the current song
     <div
       onClick={onClick}
       className="w-80 cursor-pointer hover:-translate-y-2 py-5 transition-all flex"
@@ -49,8 +50,8 @@ const ListSong = ({ song, onClick }) => {
           {audioLength ? (
             Math.round(audioLength / 60) + ":" + Math.round(audioLength % 60)
           ) : (
-            <span className="w-5 h-5 bg-grey-500 animate-pulse text-transparent">
-              .
+            <span className="bg-grey-500 animate-pulse text-transparent">
+              00:00
             </span>
           )}
         </p>
