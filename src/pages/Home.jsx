@@ -7,6 +7,7 @@ import useDebounce from "../hooks/useDebounce";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import ColorThief from "colorthief";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import ListLoader from "../components/ListLoader";
 
 const Home = () => {
   const [displaySongs, setDisplaySongs] = useState();
@@ -16,7 +17,7 @@ const Home = () => {
   const [tab, setTab] = useState("ForYou");
   const [open, setOpen] = useState(false);
   const debouncedInput = useDebounce(userInput);
-
+  // State to manage the color
   const [color1, setColor1] = useState([36, 33, 29]);
 
   // Fetching data from API
@@ -30,8 +31,6 @@ const Home = () => {
       return axios.get("https://cms.samespace.com/items/songs");
     },
   });
-
-  console.log(songs);
 
   // When data is fetched from API, set the for you songs & the top songs
   useEffect(() => {
@@ -137,8 +136,6 @@ const Home = () => {
       });
     }
   }, [selectedSong?.id]);
-
-  console.log(displaySongs);
 
   return (
     <div
@@ -297,7 +294,15 @@ const Home = () => {
                 </div>
               )}
               {/* Loading indicator */}
-              {isLoading && <></>}
+              {isLoading && (
+                <>
+                  {Array(8)
+                    .fill(null)
+                    .map((u) => (
+                      <ListLoader />
+                    ))}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -356,7 +361,15 @@ const Home = () => {
                   )}
                 </div>
               )}
-              {isLoading && <></>}
+              {isLoading && (
+                <>
+                  {Array(8)
+                    .fill(null)
+                    .map((u) => (
+                      <ListLoader />
+                    ))}
+                </>
+              )}
             </div>
           </div>
 

@@ -9,6 +9,7 @@ import {
 import { useAuth } from "../context/authContext";
 import { auth } from "../firebase/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import toast from "react-hot-toast";
 
 const provider = new GoogleAuthProvider();
 
@@ -24,6 +25,7 @@ const Account = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
+        toast.success("Signed in Successfully!");
       })
       .catch((error) => {
         setDisabled(false);
@@ -41,9 +43,12 @@ const Account = () => {
   // Handle Sign Out
   const handleLogout = () => {
     signOut(auth)
-      .then(() => {})
+      .then(() => {
+        toast.success("Signed out!");
+      })
       .catch((error) => {
         console.log(error);
+        toast.error("Something went wrong!");
       });
   };
 
