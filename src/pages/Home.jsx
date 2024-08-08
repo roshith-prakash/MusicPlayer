@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ListSong, MusicPlayer, Search, Account } from "../components";
 import spotify from "../assets/logo.png";
 import useDebounce from "../hooks/useDebounce";
@@ -11,11 +11,17 @@ import ListLoader from "../components/ListLoader";
 const Home = () => {
   // All songs fetched from the API
   const [displaySongs, setDisplaySongs] = useState();
+  // The song that is currently playing
   const [selectedSong, setSelectedSong] = useState();
+  // The songs displayed in the top tab
   const [topSongs, setTopSongs] = useState();
+  // The search text added by the user
   const [userInput, setUserInput] = useState("");
+  // To select the current tab
   const [tab, setTab] = useState("ForYou");
+  // For popout on smaller screens
   const [open, setOpen] = useState(false);
+  // Debounced input so that functions arent run on every keystroke
   const debouncedInput = useDebounce(userInput);
 
   // Fetching data from API
@@ -30,8 +36,6 @@ const Home = () => {
     },
   });
 
-  console.log(songs);
-
   // When data is fetched from API, set the for you songs & the top songs
   useEffect(() => {
     setDisplaySongs(songs?.data?.data);
@@ -39,7 +43,7 @@ const Home = () => {
     setTopSongs(top);
   }, [songs]);
 
-  // When user types something in the list
+  // When user types something in the list & debounced value is changed
   useEffect(() => {
     // When no user input, reset the list
     if (!userInput || userInput?.length == 0) {
@@ -119,6 +123,7 @@ const Home = () => {
   };
 
   return (
+    // Parent component
     <div
       className="h-screen flex flex-col overflow-hidden relative no-scrollbar"
       style={{
@@ -231,27 +236,39 @@ const Home = () => {
             {/* Song List - Hidden on Smaller Screens */}
             <div className="absolute w-fit h-full overflow-auto no-scrollbar">
               {/* List of All Songs / For You */}
+              {isLoading && (
+                <div className="flex flex-col items-center overflow-auto no-scrollbar">
+                  {Array(8)
+                    .fill(null)
+                    .map((u) => (
+                      <ListLoader />
+                    ))}
+                </div>
+              )}
+              {!isLoading && !songs && (
+                <p className="text-white pt-10">Oops! Couldn't fetch songs!</p>
+              )}
               {!isLoading && tab === "ForYou" && (
                 <div
                   data-aos="fade-up"
                   className={`flex-1 h-full flex flex-col items-center overflow-y-scroll no-scrollbar pb-5`}
                 >
-                  {displaySongs && displaySongs.length > 0 ? (
-                    displaySongs.map((song, index) => (
-                      <ListSong
-                        key={song?.id}
-                        onClick={() => {
-                          setOpen(false);
-                          setSong(song);
-                        }}
-                        song={song}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-white pt-10">
-                      Oops! Couldn't find any songs with '{debouncedInput}'
-                    </p>
-                  )}
+                  {displaySongs && displaySongs.length > 0
+                    ? displaySongs.map((song, index) => (
+                        <ListSong
+                          key={song?.id}
+                          onClick={() => {
+                            setOpen(false);
+                            setSong(song);
+                          }}
+                          song={song}
+                        />
+                      ))
+                    : songs && (
+                        <p className="text-white pt-10">
+                          Oops! Couldn't find any songs with '{debouncedInput}'
+                        </p>
+                      )}
                 </div>
               )}
               {/* List of Top Songs */}
@@ -260,33 +277,23 @@ const Home = () => {
                   data-aos="fade-up"
                   className="flex-1 h-full flex flex-col items-center overflow-y-auto no-scrollbar pb-5"
                 >
-                  {topSongs && topSongs.length > 0 ? (
-                    topSongs.map((song, index) => (
-                      <ListSong
-                        key={song?.id}
-                        onClick={() => {
-                          setOpen(false);
-                          setSong(song);
-                        }}
-                        song={song}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-white pt-10">
-                      Oops! Couldn't find any top songs with '{debouncedInput}'
-                    </p>
-                  )}
+                  {topSongs && topSongs.length > 0
+                    ? topSongs.map((song, index) => (
+                        <ListSong
+                          key={song?.id}
+                          onClick={() => {
+                            setOpen(false);
+                            setSong(song);
+                          }}
+                          song={song}
+                        />
+                      ))
+                    : songs && (
+                        <p className="text-white pt-10">
+                          Oops! Couldn't find any songs with '{debouncedInput}'
+                        </p>
+                      )}
                 </div>
-              )}
-              {/* Loading indicator */}
-              {isLoading && (
-                <>
-                  {Array(8)
-                    .fill(null)
-                    .map((u) => (
-                      <ListLoader />
-                    ))}
-                </>
               )}
             </div>
           </div>
@@ -294,35 +301,52 @@ const Home = () => {
       </div>
 
       {/* Rest of Screen - List + Player */}
-      <div className="flex-1 max-h-screen overflow-y-scroll no-scrollbar pt-5 ">
-        <div className="flex h-full overflow-auto">
+      <div className="flex-1 max-h-screen overflow-auto no-scrollbar pt-5 ">
+        <div className="flex h-full overflow-auto no-scrollbar">
           {/* Song List - Hidden on Smaller Screens */}
-          <div className="h-full flex-1 hidden lg:flex flex-col items-center overflow-auto pl-24 relative">
+          <div className="h-full flex-1 hidden lg:flex flex-col items-center overflow-auto pl-24 relative no-scrollbar">
             {/* Search bar for filtering songs based on user input */}
             <Search
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
             />
-            <div className="mt-5 w-fit h-full overflow-auto pb-10">
+            <div className="mt-5 h-full overflow-auto pb-10 no-scrollbar">
+              {isLoading && (
+                <div className="flex flex-col items-center overflow-auto no-scrollbar">
+                  {Array(8)
+                    .fill(null)
+                    .map((u) => (
+                      <ListLoader />
+                    ))}
+                </div>
+              )}
+              {!isLoading && !songs && (
+                <div className="flex flex-col items-center overflow-auto no-scrollbar">
+                  <p className="text-white pt-10 h-fit no-scrollbar">
+                    Oops! Couldn't fetch songs!
+                  </p>
+                </div>
+              )}
+
               {/* List of All Songs / For You */}
               {!isLoading && tab === "ForYou" && (
                 <div
                   data-aos="fade-up"
                   className={`flex-1  h-full flex flex-col items-center overflow-scroll no-scrollbar`}
                 >
-                  {displaySongs && displaySongs.length > 0 ? (
-                    displaySongs.map((song, index) => (
-                      <ListSong
-                        key={song?.id}
-                        onClick={() => setSong(song)}
-                        song={song}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-white pt-10">
-                      Oops! Couldn't find any songs with '{debouncedInput}'
-                    </p>
-                  )}
+                  {songs?.length != 0 && displaySongs && displaySongs.length > 0
+                    ? displaySongs.map((song, index) => (
+                        <ListSong
+                          key={song?.id}
+                          onClick={() => setSong(song)}
+                          song={song}
+                        />
+                      ))
+                    : songs && (
+                        <p className="text-white pt-10">
+                          Oops! Couldn't find any songs with '{debouncedInput}'
+                        </p>
+                      )}
                 </div>
               )}
               {/* List of Top Songs */}
@@ -331,29 +355,20 @@ const Home = () => {
                   data-aos="fade-up"
                   className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
                 >
-                  {topSongs && topSongs.length > 0 ? (
-                    topSongs.map((song, index) => (
-                      <ListSong
-                        key={song?.id}
-                        onClick={() => setSong(song)}
-                        song={song}
-                      />
-                    ))
-                  ) : (
-                    <p className="text-white pt-10">
-                      Oops! Couldn't find any top songs with '{debouncedInput}'
-                    </p>
-                  )}
+                  {songs?.length != 0 && topSongs && topSongs.length > 0
+                    ? topSongs.map((song, index) => (
+                        <ListSong
+                          key={song?.id}
+                          onClick={() => setSong(song)}
+                          song={song}
+                        />
+                      ))
+                    : songs && (
+                        <p className="text-white pt-10">
+                          Oops! Couldn't find any songs with '{debouncedInput}'
+                        </p>
+                      )}
                 </div>
-              )}
-              {isLoading && (
-                <>
-                  {Array(8)
-                    .fill(null)
-                    .map((u) => (
-                      <ListLoader />
-                    ))}
-                </>
               )}
             </div>
           </div>

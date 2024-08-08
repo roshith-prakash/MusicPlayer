@@ -192,7 +192,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
             </button>
           </PopoverTrigger>
           {/* Input range to decrease volume */}
-          <PopoverContent className="w-fit py-3 px-5 bg-black border-none">
+          <PopoverContent className="w-fit py-3 px-5 rounded-xl bg-black border-none">
             {/* Max volume is 1.0. Min volume is 0.0 */}
             <input
               value={audioVolume}
