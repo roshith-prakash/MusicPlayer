@@ -244,15 +244,15 @@ const Home = () => {
               onChange={(e) => setUserInput(e.target.value)}
             />
           </div>
-          {/* Song list + search box */}
-          <div className="flex-1 h-full max-h-screen flex flex-col items-center overflow-y-scroll no-scrollbar mt-2 ">
+          {/* Song list*/}
+          <div className="flex-1 relative h-full overflow-hidden max-h-screen flex flex-col items-center overflow-y-scroll no-scrollbar mt-2 ">
             {/* Song List - Hidden on Smaller Screens */}
-            <div className="w-fit h-full overflow-auto no-scrollbar pb-10">
+            <div className="absolute w-fit h-full overflow-auto no-scrollbar">
               {/* List of All Songs / For You */}
               {!isLoading && tab === "ForYou" && (
                 <div
                   data-aos="fade-up"
-                  className={`flex-1  h-full flex flex-col items-center overflow-scroll no-scrollbar`}
+                  className={`flex-1 h-full flex flex-col items-center overflow-y-scroll no-scrollbar pb-5`}
                 >
                   {displaySongs && displaySongs.length > 0 ? (
                     displaySongs.map((song, index) => (
@@ -276,7 +276,7 @@ const Home = () => {
               {!isLoading && tab === "TopTracks" && (
                 <div
                   data-aos="fade-up"
-                  className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
+                  className="flex-1 h-full flex flex-col items-center overflow-y-auto no-scrollbar pb-5"
                 >
                   {topSongs && topSongs.length > 0 ? (
                     topSongs.map((song, index) => (
@@ -299,7 +299,6 @@ const Home = () => {
               {/* Loading indicator */}
               {isLoading && <></>}
             </div>
-            \
           </div>
         </div>
       </div>
