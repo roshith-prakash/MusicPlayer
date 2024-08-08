@@ -142,7 +142,7 @@ const Home = () => {
 
   return (
     <div
-      className="h-screen max-h-screen overflow-y-scroll relative transition-all no-scrollbar"
+      className="h-screen flex flex-col overflow-hidden relative no-scrollbar"
       style={{
         background: `linear-gradient(to bottom right, rgb(${color1[0]},${color1[1]},${color1[2]}), black)`,
       }}
@@ -153,7 +153,7 @@ const Home = () => {
       </div>
 
       {/* Top bar for tab selection / hamburger to open the popout */}
-      <div className="h-20  flex justify-between lg:justify-normal items-center w-full p-5 px-10">
+      <div className="h-20 flex justify-between lg:justify-normal items-center w-full p-5 px-10">
         {/* Logo + Title */}
         <div className="flex gap-x-3 items-center">
           <img src={spotify} className="h-9 w-9 pointer-events-none" />
@@ -163,7 +163,7 @@ const Home = () => {
           </p>
         </div>
         {/* Button Group for Larger Screens */}
-        <div className="text-white hidden lg:flex gap-x-14 px-10 font-semibold text-xl ml-20">
+        <div className="text-white hidden lg:flex gap-x-14 px-10 font-semibold text-xl ml-16">
           <button
             onClick={() => setTab("ForYou")}
             className={`hover:scale-105 transition-all ${
@@ -181,9 +181,10 @@ const Home = () => {
             Top Tracks
           </button>
         </div>
+        {/* Hamburger button */}
         <div className="flex lg:hidden items-center gap-x-5">
           {!selectedSong && (
-            <FaLongArrowAltRight className="text-2xl text-white animate-pulse" />
+            <FaLongArrowAltRight className="text-2xl text-white animate-bounce mt-1" />
           )}
 
           <RxHamburgerMenu
@@ -191,116 +192,117 @@ const Home = () => {
             className=" text-xl cursor-pointer text-cta transition-all text-white"
           />
         </div>
-      </div>
 
-      {/* Pop out div - displayed when hamburger is clicked */}
-      <div
-        className={`block lg:hidden min-h-screen w-full text-xl md:text-lg fixed top-0 right-0 z-50 pb-6 text-center shadow-md ${
-          open ? "translate-x-0" : "translate-x-[100%]"
-        } transition-all duration-500`}
-        style={{
-          background: `linear-gradient(to bottom right, rgb(${color1[0]},${color1[1]},${color1[2]}), black)`,
-        }}
-      >
-        {/* Top bar */}
-        <div className="flex justify-between items-center py-5 px-10 lg:px-10 ">
-          {/* Title */}
-          <div className="flex items-center gap-x-3 cursor-pointer">
-            <img src={spotify} className="h-9 w-9 pointer-events-none" />
-            <p className="text-white font-medium text-2xl flex items-start">
-              Spotify
-              <span className="text-xs pt-2">&reg;</span>
-            </p>
+        {/* Pop out div - displayed when hamburger is clicked */}
+        <div
+          className={`lg:hidden min-h-screen w-full text-xl md:text-lg fixed flex flex-col overflow-hidden top-0 right-0 z-50 pb-6 text-center shadow-md ${
+            open ? "translate-x-0" : "translate-x-[100%]"
+          } transition-all duration-500`}
+          style={{
+            background: `linear-gradient(to bottom right, rgb(${color1[0]},${color1[1]},${color1[2]}), black)`,
+          }}
+        >
+          {/* Top bar */}
+          <div className="h-20 flex justify-between items-center py-5 px-10 lg:px-10 ">
+            {/* Title */}
+            <div className="flex items-center gap-x-3 cursor-pointer">
+              <img src={spotify} className="h-9 w-9 pointer-events-none" />
+              <p className="text-white font-medium text-2xl flex items-start">
+                Spotify
+                <span className="text-xs pt-2">&reg;</span>
+              </p>
+            </div>
+            {/* Close drawer */}
+            <RxCross2
+              onClick={() => setOpen(false)}
+              className="cursor-pointer text-2xl text-white"
+            />
           </div>
-          {/* Close drawer */}
-          <RxCross2
-            onClick={() => setOpen(false)}
-            className="cursor-pointer text-2xl text-white"
-          />
-        </div>
-        {/* Button group */}
-        <div className="w-full pt-8 text-white font-bold flex justify-evenly">
-          <button
-            onClick={() => setTab("ForYou")}
-            className={`hover:scale-105 transition-all ${
-              tab !== "ForYou" && "text-slate-400"
-            }`}
-          >
-            For You
-          </button>
-          <button
-            onClick={() => setTab("TopTracks")}
-            className={`hover:scale-105 transition-all ${
-              tab !== "TopTracks" && "text-slate-400"
-            }`}
-          >
-            Top Tracks
-          </button>
-        </div>
-        {/* Song list + search box */}
-        <div className="mt-14 h-full flex flex-col items-center">
-          <Search
-            value={userInput}
-            onChange={(e) => setUserInput(e.target.value)}
-          />
-          <div className="h-full mt-5 flex-1 flex-col overflow-auto items-center">
-            {/* Search bar for filtering songs based on user input */}
+          {/* Button group */}
+          <div className="h-14 w-full mt-5 text-white font-bold flex justify-evenly">
+            <button
+              onClick={() => setTab("ForYou")}
+              className={`hover:scale-105 transition-all ${
+                tab !== "ForYou" && "text-slate-400"
+              }`}
+            >
+              For You
+            </button>
+            <button
+              onClick={() => setTab("TopTracks")}
+              className={`hover:scale-105 transition-all ${
+                tab !== "TopTracks" && "text-slate-400"
+              }`}
+            >
+              Top Tracks
+            </button>
+          </div>
+          <div className="mt-5 flex justify-center">
+            <Search
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+            />
+          </div>
+          {/* Song list + search box */}
+          <div className="flex-1 max-h-screen overflow-y-scroll no-scrollbar mt-2 ">
+            {/* Song List - Hidden on Smaller Screens */}
+            <div className="h-full flex-1 flex flex-col items-center overflow-auto relative">
+              {/* Search bar for filtering songs based on user input */}
 
-            {/* List of All Songs / For You */}
-            {tab === "ForYou" && (
-              <div
-                data-aos="fade-up"
-                className={`flex-1 pt-5 h-full flex flex-col items-center overflow-auto no-scrollbar`}
-              >
-                {displaySongs && displaySongs.length > 0 ? (
-                  displaySongs.map((song, index) => (
-                    <ListSong
-                      key={index}
-                      onClick={() => {
-                        setSong(song);
-                        setOpen(false);
-                      }}
-                      song={song}
-                    />
-                  ))
-                ) : (
-                  <p className="px-4 text-white pt-10">
-                    Oops! Couldn't find any songs with '{debouncedInput}'
-                  </p>
+              <div className="mt-5 w-fit h-full overflow-auto pb-10">
+                {/* List of All Songs / For You */}
+                {!isLoading && tab === "ForYou" && (
+                  <div
+                    data-aos="fade-up"
+                    className={`flex-1  h-full flex flex-col items-center overflow-scroll no-scrollbar`}
+                  >
+                    {displaySongs && displaySongs.length > 0 ? (
+                      displaySongs.map((song, index) => (
+                        <ListSong
+                          key={index}
+                          onClick={() => setSong(song)}
+                          song={song}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-white pt-10">
+                        Oops! Couldn't find any songs with '{debouncedInput}'
+                      </p>
+                    )}
+                  </div>
                 )}
-              </div>
-            )}
-
-            {/* List of Top Songs */}
-            {tab === "TopTracks" && (
-              <div
-                data-aos="fade-up"
-                className="flex-1 pt-5 h-full flex flex-col items-center overflow-scroll no-scrollbar"
-              >
-                {topSongs && topSongs.length > 0 ? (
-                  topSongs.map((song, index) => (
-                    <ListSong
-                      key={index}
-                      onClick={() => {
-                        setSong(song);
-                        setOpen(false);
-                      }}
-                      song={song}
-                    />
-                  ))
-                ) : (
-                  <p className="px-4 text-white pt-10">
-                    Oops! Couldn't find any top songs with '{debouncedInput}'
-                  </p>
+                {/* List of Top Songs */}
+                {!isLoading && tab === "TopTracks" && (
+                  <div
+                    data-aos="fade-up"
+                    className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
+                  >
+                    {topSongs && topSongs.length > 0 ? (
+                      topSongs.map((song, index) => (
+                        <ListSong
+                          key={index}
+                          onClick={() => setSong(song)}
+                          song={song}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-white pt-10">
+                        Oops! Couldn't find any top songs with '{debouncedInput}
+                        '
+                      </p>
+                    )}
+                  </div>
                 )}
+                {/* Loading indicator */}
+                {isLoading && <></>}
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Rest of Screen - List + Player */}
-      <div className="flex-1 overflow-y-scroll no-scrollbar pt-5 pb-10">
+      <div className="flex-1 max-h-screen overflow-y-scroll no-scrollbar pt-5 ">
         <div className="flex h-full overflow-auto">
           {/* Song List - Hidden on Smaller Screens */}
           <div className="h-full flex-1 hidden lg:flex flex-col items-center overflow-auto pl-24 relative">
@@ -309,12 +311,12 @@ const Home = () => {
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
             />
-            <div className="w-fit h-full overflow-auto ">
+            <div className="mt-5 w-fit h-full overflow-auto pb-10">
               {/* List of All Songs / For You */}
-              {tab === "ForYou" && (
+              {!isLoading && tab === "ForYou" && (
                 <div
                   data-aos="fade-up"
-                  className={`flex-1 pt-5 h-full flex flex-col items-center overflow-scroll no-scrollbar`}
+                  className={`flex-1  h-full flex flex-col items-center overflow-scroll no-scrollbar`}
                 >
                   {displaySongs && displaySongs.length > 0 ? (
                     displaySongs.map((song, index) => (
@@ -332,10 +334,10 @@ const Home = () => {
                 </div>
               )}
               {/* List of Top Songs */}
-              {tab === "TopTracks" && (
+              {!isLoading && tab === "TopTracks" && (
                 <div
                   data-aos="fade-up"
-                  className="flex-1 pt-5 h-full flex flex-col items-center overflow-scroll no-scrollbar"
+                  className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
                 >
                   {topSongs && topSongs.length > 0 ? (
                     topSongs.map((song, index) => (
@@ -352,11 +354,12 @@ const Home = () => {
                   )}
                 </div>
               )}
+              {isLoading && <></>}
             </div>
           </div>
 
           {/* Music Player Div */}
-          <div className="flex-1 h-full px-5 overflow-auto no-scrollbar flex justify-center lg:justify-start text-white">
+          <div className="flex-1 h-full px-5 overflow-auto no-scrollbar flex justify-center lg:justify-start text-white pb-20">
             {selectedSong ? (
               <MusicPlayer
                 goToPrevious={selectPreviousSong}

@@ -179,7 +179,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
               )}
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-fit border-none">
+          <PopoverContent className="w-fit py-3 px-5 bg-black border-none">
             <input
               value={audioVolume}
               min={0.0}
