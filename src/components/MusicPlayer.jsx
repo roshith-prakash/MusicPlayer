@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { FaPlay } from "react-icons/fa6";
 import { FaPause } from "react-icons/fa6";
 import { FaForward } from "react-icons/fa";
 import { FaBackward } from "react-icons/fa";
 import { FaVolumeHigh } from "react-icons/fa6";
+import { FaVolumeMute } from "react-icons/fa";
 import {
   Popover,
   PopoverContent,
@@ -22,6 +23,10 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   const [currentTime, setCurrentTime] = useState(0);
   // State For volume
   const [audioVolume, setAudioVolume] = useState(1.0);
+
+  useEffect(() => {
+    setPlaying(true);
+  }, [selectedSong?.id]);
 
   // To play or pause the song
   const playOrPause = () => {
@@ -69,7 +74,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
       {/* Song Cover Art */}
       <div className="h-96 flex justify-center items-center">
         <img
-          className="w-full h-96 rounded object-cover"
+          className="w-full h-full rounded object-cover"
           src={`https://cms.samespace.com/assets/${selectedSong?.cover}`}
         />
       </div>
@@ -121,9 +126,9 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
               goToPrevious();
               setPlaying(true);
             }}
-            className="px-3 rounded-full"
+            className="px-3 rounded-full text-[#9b9a98] hover:text-white transition-all"
           >
-            <FaBackward className="text-[#9b9a98] text-lg" />
+            <FaBackward className=" text-lg" />
           </button>
 
           {/* If playing, show pause button, else show playing button */}
@@ -150,9 +155,9 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
               goToNext();
               setPlaying(true);
             }}
-            className="px-3 rounded-full"
+            className="px-3 rounded-full text-[#9b9a98] hover:text-white transition-all"
           >
-            <FaForward className="text-[#9b9a98] text-lg" />
+            <FaForward className="text-lg" />
           </button>
         </div>
 
@@ -160,7 +165,11 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
         <Popover>
           <PopoverTrigger>
             <button className="bg-bggrey p-3 rounded-full">
-              <FaVolumeHigh className="text-white text-lg" />
+              {audioVolume == 0.0 ? (
+                <FaVolumeMute className="text-white text-lg" />
+              ) : (
+                <FaVolumeHigh className="text-white text-lg" />
+              )}
             </button>
           </PopoverTrigger>
           <PopoverContent className="w-fit border-none">
