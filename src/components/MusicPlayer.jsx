@@ -23,6 +23,8 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   const [currentTime, setCurrentTime] = useState(0);
   // State For volume
   const [audioVolume, setAudioVolume] = useState(1.0);
+  // To check if cover is loading
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setPlaying(true);
@@ -74,7 +76,12 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
       {/* Song Cover Art */}
       <div className="h-96 flex justify-center items-center">
         <img
-          className="w-full h-full rounded object-cover"
+          onLoad={() => {
+            setLoading(false);
+          }}
+          className={`w-full h-full rounded object-cover bg-gray-500 ${
+            loading && "animate-pulse"
+          }`}
           src={`https://cms.samespace.com/assets/${selectedSong?.cover}`}
         />
       </div>

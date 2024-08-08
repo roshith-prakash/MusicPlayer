@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 const ListSong = ({ song, onClick }) => {
   // To store the length of the song in seconds
   const [audioLength, setAudioLength] = useState();
+  // To check if cover is loading
+  const [loading, setLoading] = useState(true);
 
   // To get the length of the song
   const getLength = (url) => {
@@ -14,20 +16,24 @@ const ListSong = ({ song, onClick }) => {
     });
   };
 
+  // Get length of the song
   useEffect(() => {
     getLength(song?.url);
-  }, [song?.name]);
+  }, [song?.id]);
 
   return (
     <div
       onClick={onClick}
-      className="w-80 cursor-pointer hover:-translate-y-1 py-5 transition-all flex"
+      className="w-80 cursor-pointer hover:-translate-y-2 py-5 transition-all flex"
     >
       <div className="w-full flex items-center justify-between gap-x-5">
         <div className="flex items-center gap-x-5">
           {/* Cover image of the song */}
           <img
-            className="h-12 w-12 rounded-full"
+            onLoad={() => setLoading(false)}
+            className={`h-12 w-12 rounded-full bg-gray-500 ${
+              loading && "animate-pulse"
+            }`}
             src={`https://cms.samespace.com/assets/${song?.cover}`}
           />
           {/* Song title + artist name */}
@@ -40,9 +46,11 @@ const ListSong = ({ song, onClick }) => {
         <p className="text-white">
           {/* If audiolength is not undefined */}
           {/* Get the minute length by dividing by 60 & remaining seconds by using mod 60 */}
-          {audioLength
-            ? Math.round(audioLength / 60) + ":" + Math.round(audioLength % 60)
-            : ""}
+          {audioLength ? (
+            Math.round(audioLength / 60) + ":" + Math.round(audioLength % 60)
+          ) : (
+            <span className="w-5 h-5 bg-grey-500 animate-pulse"></span>
+          )}
         </p>
       </div>
     </div>
