@@ -25,7 +25,7 @@ const ListSong = ({ song, onClick, selectedSong }) => {
     // On clicking the component - set Selected song as the current song
     <div
       onClick={onClick}
-      className={`w-[22rem] cursor-pointer hover:-translate-y-2 py-5 px-5 rounded-xl transition-all flex ${
+      className={`font-inter w-[22rem] cursor-pointer hover:-translate-y-2 py-5 px-5 rounded-xl transition-all flex ${
         selectedSong?.id == song?.id && "bg-white bg-opacity-10"
       }`}
     >

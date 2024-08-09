@@ -68,11 +68,11 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   };
 
   return (
-    <div className="flex w-[80%] lg:w-[65%] flex-col gap-y-5">
+    <div className="font-inter flex w-[80%] lg:w-[65%] flex-col gap-y-5">
       {/* Song Title + artist name */}
       <div>
         {/* Title - extra large size */}
-        <p className="text-4xl font-medium text-left -translate-x-1">
+        <p className="text-4xl font-medium text-left -translate-x-0.5">
           {selectedSong?.name}
         </p>
         {/* Artist's name */}
@@ -152,19 +152,13 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
           {/* If playing, show pause button, else show playing button */}
           {playing ? (
             // Pause button
-            <button
-              onClick={playOrPause}
-              className="bg-bggrey p-3 rounded-full"
-            >
-              <FaPause className="text-white text-lg" />
+            <button onClick={playOrPause} className="bg-white p-3 rounded-full">
+              <FaPause className="text-black text-lg" />
             </button>
           ) : (
             // Play button
-            <button
-              onClick={playOrPause}
-              className="bg-bggrey p-3 rounded-full"
-            >
-              <FaPlay className="text-white text-lg" />
+            <button onClick={playOrPause} className="bg-white p-3 rounded-full">
+              <FaPlay className="text-black text-lg" />
             </button>
           )}
           {/* Forward Button */}

@@ -2,7 +2,7 @@
 
 const ListLoader = () => {
   return (
-    <div className="w-80 hover:-translate-y-2 py-5 transition-all flex">
+    <div className="font-inter w-80 hover:-translate-y-2 py-5 transition-all flex">
       <div className="w-full flex items-center justify-between gap-x-5">
         <div className="flex items-center gap-x-5">
           {/* Cover image of the song - greyed out */}

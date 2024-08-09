@@ -125,7 +125,7 @@ const Home = () => {
   return (
     // Parent component
     <div
-      className="h-screen flex flex-col overflow-hidden relative no-scrollbar"
+      className="font-inter h-screen flex flex-col overflow-hidden relative no-scrollbar"
       style={{
         background: `linear-gradient(to bottom right, ${
           selectedSong?.accent || "#24211d"

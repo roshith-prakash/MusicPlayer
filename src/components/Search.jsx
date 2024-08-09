@@ -9,7 +9,7 @@ const Search = ({
 }) => {
   return (
     // Relative parent so that search icon can be placed on the right
-    <div className="relative z-2 w-80">
+    <div className="font-inter relative z-2 w-80">
       <input
         value={value}
         onChange={onChange}

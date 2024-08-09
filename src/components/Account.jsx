@@ -55,7 +55,7 @@ const Account = () => {
   };
 
   return (
-    <div>
+    <div className="font-inter">
       <Popover>
         <PopoverTrigger>
           {/* Show user's image or an account icon */}
