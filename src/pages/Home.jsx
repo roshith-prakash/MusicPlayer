@@ -125,20 +125,20 @@ const Home = () => {
   return (
     // Parent component
     <div
-      className="font-inter h-screen flex flex-col overflow-hidden relative no-scrollbar"
+      className="font-inter h-screen flex flex-col overflow-hidden relative  no-scrollbar"
       style={{
-        background: `linear-gradient(to bottom right, ${
-          selectedSong?.accent || "#24211d"
-        }, black)`,
+        transition: "all 1s",
+        background: `${selectedSong?.accent || "#24211d"}`,
       }}
     >
+      <div className="absolute z-0 top-0 left-0 h-full w-full bg-gradient-to-br from-transparent to-black"></div>
       {/* Account button */}
       <div className="fixed left-5 bottom-5 z-10">
         <Account />
       </div>
 
       {/* Top bar for tab selection / hamburger to open the popout */}
-      <div className="h-20 flex justify-between lg:justify-normal items-center w-full p-5 px-10">
+      <div className="relative z-5 h-20 flex justify-between lg:justify-normal items-center w-full p-5 px-10">
         {/* Logo + Title */}
         <div className="flex gap-x-3 items-center">
           <img src={spotify} className="h-9 w-9 pointer-events-none" />
@@ -192,7 +192,7 @@ const Home = () => {
           {/* Top bar */}
           <div className="h-20 flex justify-between items-center py-5 px-10 lg:px-10 ">
             {/* Title */}
-            <div className="flex items-center gap-x-3 cursor-pointer">
+            <div className="flex items-center gap-x-3">
               <img src={spotify} className="h-9 w-9 pointer-events-none" />
               <p className="text-white font-medium text-2xl flex items-start">
                 Spotify
@@ -250,7 +250,6 @@ const Home = () => {
               )}
               {!isLoading && tab === "ForYou" && (
                 <div
-                  data-aos="fade-up"
                   className={`flex-1 h-full flex flex-col items-center overflow-y-scroll no-scrollbar pb-5`}
                 >
                   {displaySongs && displaySongs.length > 0
@@ -274,10 +273,7 @@ const Home = () => {
               )}
               {/* List of Top Songs */}
               {!isLoading && tab === "TopTracks" && (
-                <div
-                  data-aos="fade-up"
-                  className="flex-1 h-full flex flex-col items-center overflow-y-auto no-scrollbar pb-5"
-                >
+                <div className="flex-1 h-full flex flex-col items-center overflow-y-auto no-scrollbar pb-5">
                   {topSongs && topSongs.length > 0
                     ? topSongs.map((song, index) => (
                         <ListSong
@@ -333,7 +329,6 @@ const Home = () => {
               {/* List of All Songs / For You */}
               {!isLoading && tab === "ForYou" && (
                 <div
-                  data-aos="fade-up"
                   className={`flex-1  h-full flex flex-col items-center overflow-scroll no-scrollbar`}
                 >
                   {songs?.length != 0 && displaySongs && displaySongs.length > 0
@@ -354,10 +349,7 @@ const Home = () => {
               )}
               {/* List of Top Songs */}
               {!isLoading && tab === "TopTracks" && (
-                <div
-                  data-aos="fade-up"
-                  className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar"
-                >
+                <div className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar">
                   {songs?.length != 0 && topSongs && topSongs.length > 0
                     ? topSongs.map((song, index) => (
                         <ListSong

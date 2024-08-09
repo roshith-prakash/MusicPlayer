@@ -55,11 +55,12 @@ const Account = () => {
   };
 
   return (
+    // The popup button on the bottom left of the screen
     <div className="font-inter">
       <Popover>
         <PopoverTrigger>
           {/* Show user's image or an account icon */}
-          <button className=" bg-bggrey p-1 text-white rounded-full">
+          <button className=" bg-bggrey bg-opacity-50 p-1 text-white rounded-full">
             {!currentUser ? (
               <MdOutlineAccountCircle className="h-9 w-9" />
             ) : currentUser?.photoURL ? (

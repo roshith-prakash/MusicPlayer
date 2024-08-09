@@ -68,7 +68,7 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   };
 
   return (
-    <div className="font-inter flex w-[80%] lg:w-[65%] flex-col gap-y-5">
+    <div className="font-inter relative z-5 flex w-[80%] lg:w-[65%] flex-col gap-y-5">
       {/* Song Title + artist name */}
       <div>
         {/* Title - extra large size */}

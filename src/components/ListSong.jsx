@@ -46,19 +46,18 @@ const ListSong = ({ song, onClick, selectedSong }) => {
           </div>
         </div>
         {/* Length of the song */}
-        <p
-          className={`${
-            audioLength
-              ? "text-white text-base"
-              : "bg-gray-500 text-transparent rounded animate-pulse"
-          }`}
-        >
-          {/* If audiolength is not undefined */}
-          {/* Get the minute length by dividing by 60 & remaining seconds by using mod 60 */}
-          {audioLength
-            ? Math.round(audioLength / 60) + ":" + Math.round(audioLength % 60)
-            : "00:00"}
-        </p>
+        {audioLength && (
+          <p className={`${"text-white text-base"}`}>
+            {/* If audiolength is not undefined */}
+            {/* Get the minute length by dividing by 60 & remaining seconds by using mod 60 */}
+            {audioLength &&
+              Math.round(audioLength / 60) + ":" + Math.round(audioLength % 60)}
+          </p>
+        )}
+
+        {!audioLength && (
+          <p className="h-5 w-10 rounded bg-gray-500 animate-pulse"></p>
+        )}
       </div>
     </div>
   );
