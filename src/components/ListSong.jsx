@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const ListSong = ({ song, onClick }) => {
+const ListSong = ({ song, onClick, selectedSong }) => {
   // To store the length of the song in seconds
   const [audioLength, setAudioLength] = useState();
   // To check if cover is loading
@@ -25,7 +25,9 @@ const ListSong = ({ song, onClick }) => {
     // On clicking the component - set Selected song as the current song
     <div
       onClick={onClick}
-      className="w-80 cursor-pointer hover:-translate-y-2 py-5 transition-all flex"
+      className={`w-[22rem] cursor-pointer hover:-translate-y-2 py-5 px-5 rounded-xl transition-all flex ${
+        selectedSong?.id == song?.id && "bg-white bg-opacity-10"
+      }`}
     >
       <div className="w-full flex items-center justify-between gap-x-5">
         <div className="flex items-center gap-x-5">

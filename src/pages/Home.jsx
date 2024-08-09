@@ -257,6 +257,7 @@ const Home = () => {
                     ? displaySongs.map((song, index) => (
                         <ListSong
                           key={song?.id}
+                          selectedSong={selectedSong}
                           onClick={() => {
                             setOpen(false);
                             setSong(song);
@@ -281,6 +282,7 @@ const Home = () => {
                     ? topSongs.map((song, index) => (
                         <ListSong
                           key={song?.id}
+                          selectedSong={selectedSong}
                           onClick={() => {
                             setOpen(false);
                             setSong(song);
@@ -338,6 +340,7 @@ const Home = () => {
                     ? displaySongs.map((song, index) => (
                         <ListSong
                           key={song?.id}
+                          selectedSong={selectedSong}
                           onClick={() => setSong(song)}
                           song={song}
                         />
@@ -359,6 +362,7 @@ const Home = () => {
                     ? topSongs.map((song, index) => (
                         <ListSong
                           key={song?.id}
+                          selectedSong={selectedSong}
                           onClick={() => setSong(song)}
                           song={song}
                         />
