@@ -1,8 +1,8 @@
-<h1>Assignment Task for SameSpace - Frontend Developer Role.</h1>
+<h1>Music Player</h1>
 
 <h2>Created by Roshith Prakash.</h2>
 
-<a href="https://samespace-music-player-rp.vercel.app/">Demo on Vercel</a>
+<a href="https://music-player-rp.vercel.app">Demo on Vercel</a>
 
 Packages used : 
 <ul>
