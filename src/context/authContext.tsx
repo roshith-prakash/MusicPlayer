@@ -3,7 +3,7 @@ import { auth } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 // Creating Context
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 // Hook to consume the context
 export function useAuth() {
@@ -11,7 +11,7 @@ export function useAuth() {
 }
 
 // AuthProvider Component that provides the auth context to all its children
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);

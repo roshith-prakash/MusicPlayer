@@ -6,15 +6,11 @@ import { FaForward } from "react-icons/fa";
 import { FaBackward } from "react-icons/fa";
 import { FaVolumeHigh } from "react-icons/fa6";
 import { FaVolumeMute } from "react-icons/fa";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
   // Reference to the audio element
-  const playerRef = useRef();
+  const playerRef = useRef<HTMLAudioElement>();
   // State to check whether the song is playing or not
   const [playing, setPlaying] = useState(true);
   // For the max value of range
@@ -33,12 +29,14 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
 
   // To play or pause the song
   const playOrPause = () => {
-    if (playing) {
-      playerRef.current.pause();
-      setPlaying(false);
-    } else {
-      playerRef.current.play();
-      setPlaying(true);
+    if (playerRef?.current) {
+      if (playing) {
+        playerRef.current.pause();
+        setPlaying(false);
+      } else {
+        playerRef.current.play();
+        setPlaying(true);
+      }
     }
   };
 
@@ -102,7 +100,6 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
       />
 
       {/* Seek bar for the audio */}
-      {/* Value added in style for custom css */}
       <input
         value={currentTime}
         min={0}
@@ -110,9 +107,11 @@ const MusicPlayer = ({ selectedSong, goToPrevious, goToNext }) => {
         max={duration}
         type="range"
         className="accent-white noThumb slider"
-        style={{
-          "--value": `${(currentTime / duration) * 100}%`,
-        }}
+        style={
+          {
+            "--value": `${(currentTime / duration) * 100}%`,
+          } as React.CSSProperties
+        }
       />
 
       {/* Additional Controls */}

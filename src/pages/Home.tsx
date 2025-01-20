@@ -2,19 +2,33 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ListSong, MusicPlayer, Search, Account } from "../components";
-import spotify from "../assets/logo.png";
 import useDebounce from "../hooks/useDebounce";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import ListLoader from "../components/ListLoader";
 
+// @ts-ignore
+import spotify from "../assets/logo.png";
+
+// Type
+type Song = {
+  id: number;
+  accent: string;
+  artist: string;
+  cover: string;
+  name: string;
+  top_track: boolean;
+  status: string;
+  url: string;
+};
+
 const Home = () => {
   // All songs fetched from the API
-  const [displaySongs, setDisplaySongs] = useState();
+  const [displaySongs, setDisplaySongs] = useState<undefined | Song[]>();
   // The song that is currently playing
-  const [selectedSong, setSelectedSong] = useState();
+  const [selectedSong, setSelectedSong] = useState<undefined | Song>();
   // The songs displayed in the top tab
-  const [topSongs, setTopSongs] = useState();
+  const [topSongs, setTopSongs] = useState<undefined | Song[]>();
   // The search text added by the user
   const [userInput, setUserInput] = useState("");
   // To select the current tab
@@ -80,45 +94,49 @@ const Home = () => {
 
   // Back Button Function to go to previous song
   const selectPreviousSong = () => {
-    let songsArray;
+    if (selectedSong) {
+      let songsArray;
 
-    // Populate SongsArray
-    tab == "ForYou" ? (songsArray = displaySongs) : (songsArray = topSongs);
+      // Populate SongsArray
+      tab == "ForYou" ? (songsArray = displaySongs) : (songsArray = topSongs);
 
-    // Find Index of current song
-    const indexOfCurrentSong = songsArray.findIndex(
-      (elem) => elem.id == selectedSong.id
-    );
+      // Find Index of current song
+      const indexOfCurrentSong = songsArray.findIndex(
+        (elem) => elem.id == selectedSong.id
+      );
 
-    // If current song is first song in array, move to the last song
-    if (indexOfCurrentSong == 0) {
-      setSelectedSong(songsArray[songsArray.length - 1]);
-    }
-    // Move to the previous song in the array
-    else {
-      setSelectedSong(songsArray[indexOfCurrentSong - 1]);
+      // If current song is first song in array, move to the last song
+      if (indexOfCurrentSong == 0) {
+        setSelectedSong(songsArray[songsArray.length - 1]);
+      }
+      // Move to the previous song in the array
+      else {
+        setSelectedSong(songsArray[indexOfCurrentSong - 1]);
+      }
     }
   };
 
   // Forward Button Function to go to next song
   const selectNextSong = () => {
-    let songsArray;
+    if (selectedSong) {
+      let songsArray;
 
-    // Populate SongsArray
-    tab == "ForYou" ? (songsArray = displaySongs) : (songsArray = topSongs);
+      // Populate SongsArray
+      tab == "ForYou" ? (songsArray = displaySongs) : (songsArray = topSongs);
 
-    // Find Index of current song
-    const indexOfCurrentSong = songsArray.findIndex(
-      (elem) => elem.id == selectedSong.id
-    );
+      // Find Index of current song
+      const indexOfCurrentSong = songsArray.findIndex(
+        (elem) => elem.id == selectedSong.id
+      );
 
-    // If current song is last song in array, move to the first song
-    if (indexOfCurrentSong == songsArray.length - 1) {
-      setSelectedSong(songsArray[0]);
-    }
-    // Move to the next song in the array
-    else {
-      setSelectedSong(songsArray[indexOfCurrentSong + 1]);
+      // If current song is last song in array, move to the first song
+      if (indexOfCurrentSong == songsArray.length - 1) {
+        setSelectedSong(songsArray[0]);
+      }
+      // Move to the next song in the array
+      else {
+        setSelectedSong(songsArray[indexOfCurrentSong + 1]);
+      }
     }
   };
 
@@ -128,7 +146,7 @@ const Home = () => {
       className="font-inter h-screen flex flex-col overflow-hidden relative  no-scrollbar"
       style={{
         transition: "all 1s",
-        background: `${selectedSong?.accent || "#24211d"}`,
+        background: `${selectedSong ? selectedSong?.accent : "#24211d"}`,
       }}
     >
       <div className="absolute z-0 top-0 left-0 h-full w-full bg-gradient-to-br from-transparent to-black"></div>
@@ -185,7 +203,7 @@ const Home = () => {
           } transition-all duration-500`}
           style={{
             background: `linear-gradient(to bottom right, ${
-              selectedSong?.accent || "#24211d"
+              selectedSong ? selectedSong?.accent : "#24211d"
             }, black)`,
           }}
         >
@@ -235,7 +253,7 @@ const Home = () => {
           <div className="flex-1 relative h-full overflow-hidden max-h-screen flex flex-col items-center overflow-y-scroll no-scrollbar mt-2 ">
             {/* Song List - Hidden on Smaller Screens */}
             <div className="absolute w-fit h-full overflow-auto no-scrollbar">
-              {/* List of All Songs / For You */}
+              {/* Loading indicator */}
               {isLoading && (
                 <div className="flex flex-col items-center overflow-auto no-scrollbar">
                   {Array(8)
@@ -245,15 +263,17 @@ const Home = () => {
                     ))}
                 </div>
               )}
+              {/* No data found */}
               {!isLoading && !songs && (
                 <p className="text-white pt-10">Oops! Couldn't fetch songs!</p>
               )}
+              {/* List of All Songs / For You */}
               {!isLoading && tab === "ForYou" && (
                 <div
                   className={`flex-1 h-full flex flex-col items-center overflow-y-scroll no-scrollbar pb-5`}
                 >
                   {displaySongs && displaySongs.length > 0
-                    ? displaySongs.map((song, index) => (
+                    ? displaySongs.map((song) => (
                         <ListSong
                           key={song?.id}
                           selectedSong={selectedSong}
@@ -275,7 +295,7 @@ const Home = () => {
               {!isLoading && tab === "TopTracks" && (
                 <div className="flex-1 h-full flex flex-col items-center overflow-y-auto no-scrollbar pb-5">
                   {topSongs && topSongs.length > 0
-                    ? topSongs.map((song, index) => (
+                    ? topSongs.map((song) => (
                         <ListSong
                           key={song?.id}
                           selectedSong={selectedSong}
@@ -299,7 +319,7 @@ const Home = () => {
       </div>
 
       {/* Rest of Screen - List + Player */}
-      <div className="flex-1 max-h-screen overflow-auto no-scrollbar pt-5 ">
+      <div className="flex-1 max-h-screen overflow-auto no-scrollbar pt-5">
         <div className="flex h-full overflow-auto no-scrollbar">
           {/* Song List - Hidden on Smaller Screens */}
           <div className="h-full flex-1 hidden lg:flex flex-col items-center overflow-auto pl-24 relative no-scrollbar">
@@ -318,6 +338,7 @@ const Home = () => {
                     ))}
                 </div>
               )}
+
               {!isLoading && !songs && (
                 <div className="flex flex-col items-center overflow-auto no-scrollbar">
                   <p className="text-white pt-10 h-fit no-scrollbar">
@@ -331,7 +352,7 @@ const Home = () => {
                 <div
                   className={`flex-1  h-full flex flex-col items-center overflow-scroll no-scrollbar`}
                 >
-                  {songs?.length != 0 && displaySongs && displaySongs.length > 0
+                  {displaySongs && displaySongs.length > 0
                     ? displaySongs.map((song, index) => (
                         <ListSong
                           key={song?.id}
@@ -350,8 +371,8 @@ const Home = () => {
               {/* List of Top Songs */}
               {!isLoading && tab === "TopTracks" && (
                 <div className="flex-1 h-full flex flex-col items-center overflow-scroll no-scrollbar">
-                  {songs?.length != 0 && topSongs && topSongs.length > 0
-                    ? topSongs.map((song, index) => (
+                  {topSongs && topSongs.length > 0
+                    ? topSongs.map((song) => (
                         <ListSong
                           key={song?.id}
                           selectedSong={selectedSong}

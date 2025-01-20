@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from "react";
 import { CiSearch } from "react-icons/ci";
 
 // Stylized search component
@@ -6,6 +7,11 @@ const Search = ({
   onChange,
   className,
   placeholder = "Search Song, Artist",
+}: {
+  value: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  className?: string;
+  placeholder?: string;
 }) => {
   return (
     // Relative parent so that search icon can be placed on the right

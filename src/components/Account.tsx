@@ -1,11 +1,6 @@
-import React from "react";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { useAuth } from "../context/authContext";
 import { auth } from "../firebase/firebase";
 import { GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
@@ -30,7 +25,6 @@ const Account = () => {
         toast.success("Signed in Successfully!");
       })
       .catch((error) => {
-        setDisabled(false);
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;

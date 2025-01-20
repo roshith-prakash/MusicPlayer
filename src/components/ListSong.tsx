@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 
 const ListSong = ({ song, onClick, selectedSong }) => {
   // To store the length of the song in seconds
-  const [audioLength, setAudioLength] = useState();
+  const [audioLength, setAudioLength] = useState<undefined | number>();
   // To check if cover is loading
   const [loading, setLoading] = useState(true);
 
   // To get the length of the song
-  const getLength = (url) => {
+  const getLength = (url: string) => {
     // Create a new audio object
     const audio = new Audio(url);
     // When song is loaded, get the duration and set it in the state
